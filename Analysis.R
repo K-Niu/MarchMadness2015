@@ -457,3 +457,19 @@ matchups2014 <- data.frame(team1 = firstteam, team2 = secondteam, fgPer1 = fgPer
 #Decision tree
 library(rpart)
 fit <- rpart(won ~ fgPer1 + fg3Per1 + ftPer1 + wlRat1 + ptRat1 + avgor1 + avgdr1 + avgast1 + avgto1 + avgstl1 + avgblk1 + avgpf1 + fgPer2 + fg3Per2 + ftPer2 + wlRat2 + ptRat2 + avgor2 + avgdr2 + avgast2 + avgto2 + avgstl2 + avgblk2 + avgpf2, data = train)
+Prediction2011 <- predict(fit, matchups2011)
+Prediction2012 <- predict(fit, matchups2012)
+Prediction2013 <- predict(fit, matchups2013)
+Prediction2014 <- predict(fit, matchups2014)
+
+matchups2011$id <- paste("2011", matchups2011$team1, matchups2011$team2, sep = "_")
+matchups2012$id <- paste("2012", matchups2012$team1, matchups2012$team2, sep = "_")
+matchups2013$id <- paste("2013", matchups2013$team1, matchups2013$team2, sep = "_")
+matchups2014$id <- paste("2014", matchups2014$team1, matchups2014$team2, sep = "_")
+
+submit2011 <- data.frame(id = matchups2011$id, pred = Prediction2011)
+submit2012 <- data.frame(id = matchups2012$id, pred = Prediction2012)
+submit2013 <- data.frame(id = matchups2013$id, pred = Prediction2013)
+submit2014 <- data.frame(id = matchups2014$id, pred = Prediction2014)
+submit <- rbind(submit2011, submit2012, submit2013, submit2014)
+write.csv(submit, file = "historic.csv", row.names = FALSE)
